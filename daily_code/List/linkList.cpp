@@ -64,9 +64,7 @@ int Length(ListNode* L){
     return length;
 }
 
-ListNode* tailInsert(){
-    int n = 7;
-    int A[8] = {1,3,3,4,6,6,8};
+ListNode* tailInsert(int n, int *A){
     ListNode* L = new ListNode(), *rear = L;
     for(int i = 0;i < n; i++){
         ListNode *p = new ListNode(A[i]);
@@ -109,13 +107,46 @@ ListNode* ListSplit(ListNode*& L, bool &flag){
     return dummy;
 }
 
+// 升序链表合并并输出
+ListNode* mergeList(ListNode* headA, ListNode* headB){
+    ListNode *p1 = headA->next, *p2 = headB->next;
+    ListNode* dummy = new ListNode();
+    while(p1 != nullptr && p2 != nullptr){
+        if(p1->data > p2->data){
+            ListNode* s = new ListNode(p2->data);
+            s->next = dummy->next;
+            dummy->next = s;
+            p2 = p2->next;
+        }else{
+            ListNode* s = new ListNode(p1->data);
+            s->next = dummy->next;
+            dummy->next = s;
+            p1 = p1->next;
+        }
+    }
+    if(p1 != nullptr){
+        ListNode* s = new ListNode(p1->data);
+            s->next = dummy->next;
+            dummy->next = s;
+            p1 = p1->next;
+    }else{
+        ListNode* s = new ListNode(p2->data);
+        s->next = dummy->next;
+        dummy->next = s;
+        p2 = p2->next;
+    }
+    return dummy;
+}
+
 int main(void)
 {
-    ListNode* L = tailInsert();
-    printList(L);
-    ListMatrix* res = new ListMatrix();
-    res = solve(L);
-
-    
+    int A[5] = {1,5,7,10};
+    int B[7] = {2,4,6,9,19,56};
+    ListNode* L1 = tailInsert(4,A);
+    printList(L1);
+    ListNode* L2 = tailInsert(6,B);
+    printList(L2);
+    ListNode* res = mergeList(L1,L2);
+    printList(res);  
     return 0;
 }

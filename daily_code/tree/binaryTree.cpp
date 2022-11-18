@@ -106,14 +106,37 @@ TreeNode* findBST(TreeNode* root, int x){
     if(root->val < x) return findBST(root->right,x);
 }
 
+// 判断是否有子树
+bool isSubTree(TreeNode* root, TreeNode* child){
+    if(child == NULL) return true;
+    if(root == NULL && child != NULL) return false;
+    if(root->val == child->val){
+        return isSubTree(root->left,child->left) && isSubTree(root->right,child->right);
+    }
+    return false;
+}
+
+bool judgeSimilaryTree(TreeNode* root, TreeNode* child){
+    // 判断是否有child子节点
+    if(child == NULL) return false;
+    if(root == NULL && child != NULL) return false;
+    bool flag = false;
+    if(root->val == child->val){
+        flag = isSubTree(root, child);
+    }
+    return flag || judgeSimilaryTree(root->left, child) || judgeSimilaryTree(root->right, child);
+}
+
 int main(void)
 {
     int A[7] = {5,3,8,2,-1,7,9};
     TreeNode* root =  buildTree(A, 7);
     preOrder(root);
     cout << endl;
-    TreeNode* res = findBST(root, 6);
-    preOrder(root);
-    
+    int B[7] = {6,3,8,1,-1,7,9};
+    TreeNode* child =  buildTree(B, 7);
+    preOrder(child);
+    cout << endl;
+    cout << judgeSimilaryTree(root,child) << endl;
     return 0;
 }
